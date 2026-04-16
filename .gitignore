@@ -1,0 +1,4 @@
+output/*.json
+output/*.md
+scripts/__pycache__/
+*.pyc

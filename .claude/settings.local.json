@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(opencode --version)",
+      "Bash(codex --version)",
+      "Read(//home/darthvader/Document-Transport/**)",
+      "Bash(rm -f cerebro-skill.zip)",
+      "Bash(zip -r cerebro-skill.zip cerebro-skill/ --exclude \"cerebro-skill/.claude/*\")",
+      "Bash(cp -r ~/Document-Transport/cerebro-skill ~/.openclaw/shared-skills/cerebro)",
+      "Read(//home/darthvader/.openclaw/shared-skills/**)",
+      "Bash(gh repo:*)"
+    ]
+  }
+}
