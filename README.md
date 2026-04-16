@@ -2,7 +2,7 @@
 
 > Scan, analyze, and connect knowledge across a markdown vault. Think like a strategist, not a search engine.
 
-**Version:** 1.1.0 · **License:** MIT · **Author:** microhustlestack
+**Version:** 2.0.0 · **License:** MIT · **Author:** microhustlestack
 
 ---
 
@@ -80,20 +80,55 @@ opencode run 'You are CEREBRO. Analyze vault-index.json and produce the full CER
 
 ## The vault_parser.py Script
 
-A production-grade Python parser bundled in `scripts/`. Parses every `.md` file in a vault and produces a structured JSON index.
+A production-grade Python parser bundled in `scripts/`. Parses every `.md` file in a vault and produces a structured JSON index, urgency triage, strategic scores, and a ready-to-use CEREBRO INTELLIGENCE SCAN report.
 
 **What it extracts:**
-- YAML frontmatter
-- Wikilinks (`[[...]]`) and backlinks
-- Tags (`#tag`)
-- Callouts, dataview queries, embeds, tables, code blocks
+- YAML frontmatter, wikilinks, backlinks, tags, callouts, tables, dataview queries, code blocks
 - Entity distribution, tag index, link graph, orphan detection
+- **Urgency signals** — keywords (`urgent`, `asap`, `critical`), ISO dates in body text, frontmatter deadline fields (`deadline`, `due_date`, `apply_by`, etc.)
+- **Strategic scores** — four-dimension composite score per note (see Scoring Model below)
 
 **Dependencies:** Python 3.11+ · PyYAML only (no other external deps)
 
 ```bash
-python3 scripts/vault_parser.py /path/to/vault output/vault-index.json
+# Basic scan — report to stdout
+python3 scripts/vault_parser.py /path/to/vault
+
+# JSON index + report file
+python3 scripts/vault_parser.py /path/to/vault output/vault-index.json \
+  --report output/cerebro_report.md
+
+# Focused query with custom result count
+python3 scripts/vault_parser.py /path/to/vault --query "grant opportunities" --top 15
 ```
+
+## Scoring Model
+
+Every note is scored across four dimensions. Composite score drives Top Matches ranking.
+
+| Dimension | Weight | What it measures |
+|-----------|--------|-----------------|
+| Connectivity | 35% | Outgoing wikilinks + 2× incoming backlinks |
+| Tag Influence | 25% | How widely this note's tags appear across the vault |
+| Urgency | 25% | Derived from urgency signal levels (URGENT=1.0, HIGH=0.6, STANDARD=0.2) |
+| Richness | 15% | Frontmatter, headings, word count, tables, callouts |
+
+## Urgency Detection
+
+VaultParser automatically classifies notes by time-sensitivity:
+
+| Signal | Source |
+|--------|--------|
+| Keywords | `urgent`, `asap`, `immediately`, `critical`, `overdue`, `must act` |
+| ISO dates | Any `YYYY-MM-DD` in body text |
+| Frontmatter fields | `deadline`, `due`, `due_date`, `submit_by`, `expires`, `closes`, `apply_by` |
+
+| Days Until | Level |
+|------------|-------|
+| Past | PAST |
+| 0–7 | URGENT |
+| 8–30 | HIGH |
+| 31+ | STANDARD |
 
 ---
 
@@ -207,14 +242,30 @@ openclaw message send --target telegram:<your-id> --message "$(cat cerebro_repor
 
 ---
 
+## Installation Script
+
+```bash
+# Install to all platforms at once
+bash install.sh
+
+# Or target a specific platform
+bash install.sh hermes
+bash install.sh openclaw
+bash install.sh claude-code
+```
+
+Installs SKILL.md, vault_parser.py, and CLAUDE.md to the correct directory for each platform.
+
 ## Repository Structure
 
 ```
 cerebro-skill/
-├── SKILL.md          # Agent skill definition (all platforms)
+├── SKILL.md              # Agent skill definition (all platforms)
+├── CLAUDE.md             # Claude Code guidance
+├── install.sh            # One-command installer
 ├── scripts/
-│   └── vault_parser.py   # Vault indexing script
-├── output/           # Runtime reports (git-ignored)
+│   └── vault_parser.py   # Vault indexing + scoring + urgency engine
+├── output/               # Runtime reports (git-ignored)
 └── README.md
 ```
 
@@ -378,9 +429,10 @@ Stack the full system like this:
 
 ### Honest Gaps (Current State)
 
-| Missing | Status |
+| Item | Status |
 |---|---|
-| Real scoring models (impact, urgency, ROI) | Not yet built |
+| Scoring model (connectivity, urgency, tag influence, richness) | **Built — v2.0.0** |
+| Urgency detection (keywords, ISO dates, frontmatter) | **Built — v2.0.0** |
 | Automation layer (continuous scans) | Planned |
 | Visualization (graphs, dashboards) | Planned |
 | Memory persistence across runs | Planned |

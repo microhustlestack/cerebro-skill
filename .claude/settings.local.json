@@ -8,7 +8,16 @@
       "Bash(zip -r cerebro-skill.zip cerebro-skill/ --exclude \"cerebro-skill/.claude/*\")",
       "Bash(cp -r ~/Document-Transport/cerebro-skill ~/.openclaw/shared-skills/cerebro)",
       "Read(//home/darthvader/.openclaw/shared-skills/**)",
-      "Bash(gh repo:*)"
+      "Bash(gh repo:*)",
+      "Bash(hermes skills:*)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(openclaw skills:*)",
+      "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/SKILL.md ~/Document-Transport/cerebro-skill/SKILL.md)",
+      "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/CLAUDE.md ~/Document-Transport/cerebro-skill/CLAUDE.md)",
+      "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/vault_parser.py ~/Document-Transport/cerebro-skill/scripts/vault_parser.py)",
+      "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/install.sh ~/Document-Transport/cerebro-skill/install.sh)",
+      "Bash(chmod +x ~/Document-Transport/cerebro-skill/install.sh)",
+      "Bash(bash:*)"
     ]
   }
 }
