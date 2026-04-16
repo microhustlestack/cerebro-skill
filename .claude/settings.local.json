@@ -17,7 +17,17 @@
       "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/vault_parser.py ~/Document-Transport/cerebro-skill/scripts/vault_parser.py)",
       "Bash(cp /home/darthvader/Documents/files\\\\\\(1\\\\\\)/install.sh ~/Document-Transport/cerebro-skill/install.sh)",
       "Bash(chmod +x ~/Document-Transport/cerebro-skill/install.sh)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(mkdir -p tests .github/workflows)",
+      "Bash(cp /home/darthvader/Documents/files/vault_parser.py scripts/vault_parser.py)",
+      "Bash(cp /home/darthvader/Documents/files/test_vault_parser.py tests/test_vault_parser.py)",
+      "Bash(cp /home/darthvader/Documents/files/tests.yml .github/workflows/tests.yml)",
+      "Bash(cp /home/darthvader/Documents/files/README.md README.md)",
+      "Bash(pip install:*)",
+      "Bash(python -m pytest tests/ -v --tb=short)",
+      "Bash(python3 -m venv .venv)",
+      "Bash(.venv/bin/pip install:*)",
+      "Bash(.venv/bin/python -m pytest tests/ -v --tb=short)"
     ]
   }
 }

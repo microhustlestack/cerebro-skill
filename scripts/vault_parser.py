@@ -185,6 +185,7 @@ class VaultParser:
         self._note_directory_index: dict[str, list[str]] = defaultdict(list)
         self.daily_notes: list[str] = []
         self.parse_errors: list[dict] = []
+        self._filename_to_rel: dict[str, str] = {}  # normalized filename -> rel_path
 
         self._category_hints = {
             "skill": ["when to use", "when the user wants", "triggers on", "activation signals"],
@@ -628,7 +629,7 @@ class VaultParser:
 
     def _build_link_graph(self):
         """Build link and backlink graphs using resolved rel_paths."""
-        filename_to_rel: dict[str, str] = {
+        self._filename_to_rel = {
             self._normalize_filename(n.filename): n.rel_path
             for n in self.notes.values()
         }
@@ -637,7 +638,7 @@ class VaultParser:
             for link in note.wikilinks:
                 target_norm = self._normalize_filename(link.target)
                 targets.append(link.target)
-                target_rel = filename_to_rel.get(target_norm)
+                target_rel = self._filename_to_rel.get(target_norm)
                 if target_rel:
                     self.backlink_graph[target_rel].append(note.rel_path)
             if targets:
@@ -783,11 +784,7 @@ class VaultParser:
                 break
             a_targets = self.link_graph.get(note.rel_path, [])
             for target_name in a_targets:
-                norm = self._normalize_filename(target_name)
-                target_rel = next(
-                    (n.rel_path for n in self.notes.values() if self._normalize_filename(n.filename) == norm),
-                    None
-                )
+                target_rel = self._filename_to_rel.get(self._normalize_filename(target_name))
                 if not target_rel:
                     continue
                 for c_name in self.link_graph.get(target_rel, []):
