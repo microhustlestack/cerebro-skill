@@ -1,1 +1,2 @@
+# Runtime dependency. Prefer `pip install -e .` which reads pyproject.toml.
 PyYAML>=6.0

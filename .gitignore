@@ -7,3 +7,9 @@ __pycache__/
 .pytest_cache/
 .claude/
 .venv/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+src/*.egg-info/
