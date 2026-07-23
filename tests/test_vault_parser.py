@@ -16,8 +16,7 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
-from vault_parser import (
+from cerebro import (
     VaultParser,
     ParsedNote,
     UrgencySignal,
@@ -441,8 +440,10 @@ class TestJsonExport:
             os.chdir(original_dir)
 
     def test_export_json_cerebro_version(self, vault):
+        """Version travels from __init__ so the index never claims a stale build."""
+        from cerebro import __version__
         data = json.loads(vault.export_json())
-        assert data["cerebro_version"] == "2.0"
+        assert data["cerebro_version"] == __version__
 
 
 # ──────────────────────────────────────────────
