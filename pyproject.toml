@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cerebro-skill"
+name = "vestrik-skill"
 dynamic = ["version"]
-description = "Strategic intelligence engine for markdown vaults — scan, score, and connect knowledge across Obsidian and plain-markdown knowledge bases."
+description = "VESTRIK // VAULT — structured knowledge intelligence for markdown vaults and AI agents."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -26,15 +26,16 @@ dependencies = ["PyYAML>=6.0"]
 dev = ["pytest>=8.0", "pytest-cov>=5.0"]
 
 [project.scripts]
+vestrik = "vestrik.cli:main"
 cerebro = "cerebro.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/microhustlestack/cerebro"
-Issues = "https://github.com/microhustlestack/cerebro/issues"
-Changelog = "https://github.com/microhustlestack/cerebro/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/microhustlestack/cerebro-skill"
+Issues = "https://github.com/microhustlestack/cerebro-skill/issues"
+Changelog = "https://github.com/microhustlestack/cerebro-skill/blob/main/CHANGELOG.md"
 
 [tool.setuptools.dynamic]
-version = { attr = "cerebro.__version__" }
+version = { attr = "vestrik.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
