@@ -1,50 +1,19 @@
-# CLAUDE.md
+# VESTRIK // Claude Code Guidance
 
-Guidance for Claude Code when working in this repository.
+VESTRIK // VAULT is structured knowledge intelligence for markdown vaults.
 
-## What this is
+## Engineering rule for this rebrand
 
-CEREBRO is a strategic intelligence engine for markdown vaults. It parses
-an Obsidian-style vault, scores notes, detects urgency, and surfaces
-structural gaps and connections.
+Treat the VESTRIK migration as an identity/package migration only. Do not mix in parser, scoring, graph,
+urgency or gap-analysis refactors. Preserve observable behavior unless a change is explicitly documented as
+compatibility-related.
 
-It ships as both a Python package and an Agent Skill (`SKILL.md` at root).
+## Canonical interfaces
 
-## Commands
+- Python: `from vestrik import VaultParser`
+- CLI: `vestrik`
+- Agent Skill: `name: vestrik`
+- Claude install path: `~/.claude/skills/vestrik/`
 
-```bash
-pip install -e ".[dev]"      # setup
-pytest                       # 107 tests, sub-second
-python3 scripts/validate_skill.py SKILL.md
-
-cerebro /path/to/vault --gaps --report cerebro_report.md
-cerebro /path/to/vault out.json --gaps --quiet
-```
-
-## Layout
-
-```
-src/cerebro/
-  models.py     dataclasses only
-  parser.py     VaultParser — file walking, graphs, scoring
-  analysis.py   AnalysisMixin — gaps, implicit connections, bottlenecks
-  report.py     ReportMixin — markdown + JSON rendering
-  cli.py        argparse entrypoint
-scripts/
-  vault_parser.py     back-compat shim, forwards to the package
-  validate_skill.py   SKILL.md frontmatter validator (runs in CI)
-```
-
-`VaultParser(ReportMixin, AnalysisMixin)` — one object, separated sources.
-
-## Conventions
-
-Analysis findings must be structural: derived from links, tags and
-frontmatter the author wrote. Do not add findings inferred from prose
-statistics; an unverifiable finding is worse than no finding.
-
-Version lives in `src/cerebro/__init__.py` and nowhere else. `pyproject.toml`
-and the JSON export both read from it.
-
-`scripts/vault_parser.py` is a compatibility shim. Existing installs call
-that path — don't delete it, and don't add logic to it.
+The `cerebro` package and CLI remain temporary compatibility surfaces for existing users. New documentation and
+examples should use VESTRIK.
