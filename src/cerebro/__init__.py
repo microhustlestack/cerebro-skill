@@ -10,7 +10,7 @@ Think like a strategist, not a search engine.
     print(vault.export_cerebro_report())
 """
 
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 __author__ = "J'Juan Wilson Jr. / Micro Hustle Stack"
 __license__ = "MIT"
 

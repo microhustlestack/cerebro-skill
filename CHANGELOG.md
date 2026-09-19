@@ -6,6 +6,10 @@ All notable changes to cerebro-skill are documented here.
 
 ## [Unreleased]
 
+---
+
+## [3.0.1] — 2026-09-19
+
 ### Fixed
 
 - Removed the stale nested v1.1 skill bundle that conflicted with the root

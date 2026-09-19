@@ -3,7 +3,7 @@
 > Scan, score, and connect knowledge across a markdown vault.
 > Think like a strategist, not a search engine.
 
-**Version:** 3.0.0 · **License:** MIT · **Python:** 3.11+
+**Version:** 3.0.1 · **License:** MIT · **Python:** 3.11+
 
 [![Tests](https://github.com/microhustlestack/cerebro-skill/actions/workflows/tests.yml/badge.svg)](https://github.com/microhustlestack/cerebro-skill/actions/workflows/tests.yml)
 
