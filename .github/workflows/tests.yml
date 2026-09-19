@@ -1,5 +1,8 @@
 name: Tests
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
@@ -15,10 +18,10 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -37,8 +40,15 @@ jobs:
   skill-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install validator dependency
+        run: python -m pip install 'PyYAML>=6.0'
       - name: Validate SKILL.md frontmatter
         run: |
           mapfile -t skill_files < <(find . -name SKILL.md -not -path './.git/*' -print)
-          python3 scripts/validate_skill.py "${skill_files[@]}"
+          python scripts/validate_skill.py "${skill_files[@]}"

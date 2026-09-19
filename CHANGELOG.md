@@ -16,6 +16,8 @@ All notable changes to cerebro-skill are documented here.
 - Create parent directories consistently for JSON and Markdown output.
 - Report footers now use the package version instead of hardcoded v2.0.
 - Corrected package metadata URLs and aligned install documentation.
+- Updated GitHub Actions to Node 24-compatible action majors and made the
+  skill validator's PyYAML dependency explicit.
 
 ### Tests
 
