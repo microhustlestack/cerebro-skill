@@ -17,6 +17,12 @@ from .parser import VaultParser
 _URGENCY_RANK = {"URGENT": 4, "HIGH": 3, "STANDARD": 2, "PAST": 1}
 
 
+def _ensure_parent_dir(path: str) -> None:
+    """Create a file's parent directory when one was provided."""
+    parent = os.path.dirname(os.path.abspath(path))
+    os.makedirs(parent, exist_ok=True)
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cerebro",
@@ -156,6 +162,7 @@ def _run(argv: list[str] = None) -> int:
         if args.gaps:
             payload = json.loads(vault.export_json())
             payload["gap_analysis"] = vault.gap_report()
+            _ensure_parent_dir(args.output)
             with open(args.output, "w", encoding="utf-8") as f:
                 json.dump(payload, f, indent=2, ensure_ascii=False)
         else:
@@ -164,10 +171,13 @@ def _run(argv: list[str] = None) -> int:
             print(f"\nJSON index written: {args.output}")
 
     if args.report:
-        report_text = vault.export_cerebro_report(query=args.query, top_n=args.top)
+        report_text = vault.export_cerebro_report(
+            query=args.query, top_n=args.top, include_gaps=args.gaps
+        )
         if args.report == "-":
             print(report_text)
         else:
+            _ensure_parent_dir(args.report)
             with open(args.report, "w", encoding="utf-8") as f:
                 f.write(report_text)
             if not args.quiet:

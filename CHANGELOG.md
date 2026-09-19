@@ -4,6 +4,26 @@ All notable changes to cerebro-skill are documented here.
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Removed the stale nested v1.1 skill bundle that conflicted with the root
+  v3 skill definition and parser.
+- Made `install.sh` work inside virtual environments and propagate package
+  installation failures.
+- Added gap findings to Markdown reports produced with `--gaps`.
+- Create parent directories consistently for JSON and Markdown output.
+- Report footers now use the package version instead of hardcoded v2.0.
+- Corrected package metadata URLs and aligned install documentation.
+
+### Tests
+
+- Added coverage for the compatibility shim, nested output directories,
+  gap-aware reports, version footers, and all discovered skill definitions.
+
+---
+
 ## [3.0.0] — 2026-07-23
 
 Consolidation release. Merges the `cerebro-skill-v2` specification into this

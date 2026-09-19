@@ -55,13 +55,13 @@ cerebro /path/to/vault output/vault-index.json \
 # Report to stdout, nothing else
 cerebro /path/to/vault --quiet --report -
 
-# Legacy path (still supported)
-python3 $CEREBRO_SKILL_DIR/scripts/vault_parser.py /path/to/vault
+# Legacy path from a repository checkout (still supported)
+python3 scripts/vault_parser.py /path/to/vault
 ```
 
-`$CEREBRO_SKILL_DIR` is wherever this skill is installed. Requires Python
-3.11+ and PyYAML. If `cerebro` is not on PATH, run `pip install -e .` from
-the repo root, or fall back to the `scripts/vault_parser.py` path.
+Requires Python 3.11+ and PyYAML. If `cerebro` is not on PATH, install the
+package from the repo root with `python3 -m pip install .`. A deployed skill
+can also invoke its adjacent `scripts/vault_parser.py` compatibility shim.
 
 ## Scoring Model
 

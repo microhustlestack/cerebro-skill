@@ -39,4 +39,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Validate SKILL.md frontmatter
-        run: python3 scripts/validate_skill.py SKILL.md
+        run: |
+          mapfile -t skill_files < <(find . -name SKILL.md -not -path './.git/*' -print)
+          python3 scripts/validate_skill.py "${skill_files[@]}"

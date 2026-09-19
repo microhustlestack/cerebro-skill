@@ -5,7 +5,10 @@ Covers argument parsing, exit codes, file outputs, and the --gaps payload.
 """
 
 import json
+import subprocess
+import sys
 import textwrap
+from pathlib import Path
 
 import pytest
 
@@ -104,6 +107,20 @@ def test_report_written_to_file(vault_dir, tmp_path):
     assert "CEREBRO INTELLIGENCE SCAN" in out.read_text(encoding="utf-8")
 
 
+def test_report_creates_parent_directory(vault_dir, tmp_path):
+    out = tmp_path / "new" / "nested" / "report.md"
+    assert main([str(vault_dir), "--quiet", "--report", str(out)]) == 0
+    assert out.is_file()
+
+
+def test_gaps_report_contains_gap_section(vault_dir, tmp_path):
+    out = tmp_path / "report.md"
+    assert main([str(vault_dir), "--quiet", "--gaps", "--report", str(out)]) == 0
+    report = out.read_text(encoding="utf-8")
+    assert "## Gaps" in report
+    assert "missing-thing" in report
+
+
 def test_report_dash_goes_to_stdout(vault_dir, capsys):
     main([str(vault_dir), "--quiet", "--report", "-"])
     assert "CEREBRO INTELLIGENCE SCAN" in capsys.readouterr().out
@@ -126,6 +143,12 @@ def test_gaps_flag_adds_gap_analysis_to_index(vault_dir, tmp_path):
     assert "missing-thing" in names
 
 
+def test_gaps_index_creates_parent_directory(vault_dir, tmp_path):
+    out = tmp_path / "new" / "nested" / "index.json"
+    assert main([str(vault_dir), str(out), "--quiet", "--gaps"]) == 0
+    assert "gap_analysis" in json.loads(out.read_text(encoding="utf-8"))
+
+
 def test_index_without_gaps_flag_omits_gap_analysis(vault_dir, tmp_path):
     out = tmp_path / "index.json"
     main([str(vault_dir), str(out), "--quiet"])
@@ -135,3 +158,15 @@ def test_index_without_gaps_flag_omits_gap_analysis(vault_dir, tmp_path):
 def test_gaps_printed_to_console(vault_dir, capsys):
     main([str(vault_dir), "--gaps"])
     assert "UNRESOLVED ENTITIES" in capsys.readouterr().out
+
+
+def test_legacy_shim_reports_package_version():
+    repo_root = Path(__file__).resolve().parents[1]
+    result = subprocess.run(
+        [sys.executable, str(repo_root / "scripts" / "vault_parser.py"), "--version"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert f"cerebro {__version__}" in result.stdout

@@ -13,7 +13,7 @@ Checks:
   - description is <= 1024 chars and states both what and when
 
 Usage:
-    python3 scripts/validate_skill.py skill/SKILL.md
+    python3 scripts/validate_skill.py SKILL.md
 """
 
 import re

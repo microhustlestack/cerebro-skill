@@ -17,7 +17,9 @@ from . import __version__
 class ReportMixin:
     """Output rendering for VaultParser. Not usable standalone."""
 
-    def export_cerebro_report(self, query: str = None, top_n: int = 10) -> str:
+    def export_cerebro_report(
+        self, query: str = None, top_n: int = 10, include_gaps: bool = False
+    ) -> str:
         """
         Generate a CEREBRO INTELLIGENCE SCAN report.
 
@@ -117,6 +119,49 @@ class ReportMixin:
                 lines.append(f"  #{tag} ({len(rels)} notes): {', '.join(names[:3])}{overflow}")
             lines.append("")
 
+        if include_gaps:
+            lines.append("## Gaps")
+            gap_data = self.gap_report()
+
+            unresolved = gap_data["unresolved_links"]
+            lines.append("### Unresolved Entities")
+            if unresolved:
+                for item in unresolved[:10]:
+                    lines.append(f"- {item['name']} ({item['mentions']} references)")
+            else:
+                lines.append("- None detected.")
+            lines.append("")
+
+            implicit = gap_data["implicit_connections"]
+            lines.append("### Implicit Connections")
+            if implicit:
+                for item in implicit[:10]:
+                    a, b = item["pair"]
+                    tags = ", ".join(f"#{tag}" for tag in item["shared_tags"])
+                    lines.append(f"- {a} <-> {b} — shared context: {tags}")
+            else:
+                lines.append("- None detected.")
+            lines.append("")
+
+            bottlenecks = gap_data["bottlenecks"]
+            lines.append("### Bottlenecks")
+            if bottlenecks:
+                for item in bottlenecks[:10]:
+                    lines.append(
+                        f"- {item['rel_path']} ({item['dependents']} dependents)"
+                    )
+            else:
+                lines.append("- None detected.")
+            lines.append("")
+
+            thin = gap_data["thin_coverage"]
+            lines.append("### Thin Coverage")
+            if thin:
+                lines.append("- " + ", ".join(f"#{item['tag']}" for item in thin[:20]))
+            else:
+                lines.append("- None detected.")
+            lines.append("")
+
         # Strategic Insight
         lines.append("## Strategic Insight")
 
@@ -182,7 +227,7 @@ class ReportMixin:
 
         lines.append("")
         lines.append("---")
-        lines.append(f"CEREBRO v2.0 | {today_str} | vault_parser.py")
+        lines.append(f"CEREBRO v{__version__} | {today_str} | cerebro")
 
         return '\n'.join(lines)
 

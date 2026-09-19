@@ -29,9 +29,9 @@ dev = ["pytest>=8.0", "pytest-cov>=5.0"]
 cerebro = "cerebro.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/microhustlestack/cerebro"
-Issues = "https://github.com/microhustlestack/cerebro/issues"
-Changelog = "https://github.com/microhustlestack/cerebro/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/microhustlestack/cerebro-skill"
+Issues = "https://github.com/microhustlestack/cerebro-skill/issues"
+Changelog = "https://github.com/microhustlestack/cerebro-skill/blob/main/CHANGELOG.md"
 
 [tool.setuptools.dynamic]
 version = { attr = "cerebro.__version__" }

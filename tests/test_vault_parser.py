@@ -382,7 +382,15 @@ class TestCerebroReport:
 
     def test_report_footer_present(self, vault):
         report = vault.export_cerebro_report()
-        assert "CEREBRO v2.0" in report
+        from cerebro import __version__
+
+        assert f"CEREBRO v{__version__}" in report
+
+    def test_report_includes_gaps_when_requested(self, vault):
+        report = vault.export_cerebro_report(include_gaps=True)
+        assert "## Gaps" in report
+        assert "### Unresolved Entities" in report
+        assert "### Thin Coverage" in report
 
     def test_report_top_n_respected(self, vault):
         report = vault.export_cerebro_report(top_n=2)

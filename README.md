@@ -45,15 +45,25 @@ Every CEREBRO finding can be verified by opening two files.
 ```bash
 git clone https://github.com/microhustlestack/cerebro-skill.git
 cd cerebro-skill
-pip install -e .
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install .
+cerebro --version
 ```
+
+On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1` before
+running `python -m pip install .`.
 
 Or deploy as an agent skill at the same time:
 
 ```bash
-bash install.sh              # package + every agent runtime detected
-bash install.sh claude       # one target: claude | hermes | openclaw | package
+bash install.sh              # package + Claude; detected Hermes/OpenClaw
+bash install.sh package claude  # install the CLI and one skill target
 ```
+
+Explicit targets are `package`, `claude`, `hermes`, and `openclaw`. Supplying
+targets replaces the defaults, so include `package` when you also want the
+`cerebro` command installed.
 
 Dependencies: Python 3.11+ and PyYAML. Nothing else.
 
@@ -74,7 +84,7 @@ cerebro ~/vault --quiet --report -
 
 | Flag | Effect |
 |------|--------|
-| `--gaps` | Add unresolved entities, implicit connections, bottlenecks, thin coverage |
+| `--gaps` | Add unresolved entities, implicit connections, bottlenecks, and thin coverage to console, JSON, and Markdown report output |
 | `--report FILE` | Write the CEREBRO report (`-` for stdout) |
 | `--query TEXT` | Label the scan in the report header |
 | `--top N` | Number of ranked notes (default 10) |
@@ -94,7 +104,7 @@ deployed, trigger it in natural language:
 | Platform | Install |
 |----------|---------|
 | **Claude Code** | `bash install.sh claude` → `~/.claude/skills/cerebro/` |
-| **Hermes** | `hermes skills tap add microhustlestack/cerebro-skill` |
+| **Hermes** | `bash install.sh package hermes` → `~/.hermes/skills/research/cerebro/` |
 | **OpenClaw** | `bash install.sh openclaw` |
 | **Opencode** | `opencode run` with `-f vault-index.json` |
 | **Codex** | Run inside a git repo with `--full-auto` |
@@ -215,7 +225,7 @@ cerebro-skill/
   scripts/
     vault_parser.py         Back-compat shim (2.x entry path)
     validate_skill.py       SKILL.md frontmatter validator
-  tests/                    107 tests
+  tests/                    112 tests
   samples/                  Live example report
 ```
 
@@ -224,11 +234,11 @@ cerebro-skill/
 ## Tests
 
 ```bash
-pip install -e ".[dev]"
-pytest
+python3 -m pip install -e ".[dev]"
+python3 -m pytest
 ```
 
-107 tests covering parsing, link graph, orphan detection, urgency, scoring,
+112 tests covering parsing, link graph, orphan detection, urgency, scoring,
 gap analysis, report output, JSON export, CLI behavior, and edge cases. CI
 runs on Python 3.11, 3.12 and 3.13.
 
@@ -236,12 +246,15 @@ runs on Python 3.11, 3.12 and 3.13.
 
 ## Upgrading from 2.x
 
-Nothing breaks. `scripts/vault_parser.py` still works and forwards to the
-package, so existing SKILL files, shell snippets and installs are
-unaffected.
+The legacy CLI path remains supported. `scripts/vault_parser.py` forwards to
+the package and accepts the same arguments as the `cerebro` entrypoint.
 
-To adopt the new entrypoint: `pip install -e .`, then use `cerebro` in
+To adopt the new entrypoint: `python3 -m pip install .`, then use `cerebro` in
 place of `python3 scripts/vault_parser.py`.
+
+To upgrade a source checkout, pull the desired release and rerun
+`python3 -m pip install --upgrade .`. To uninstall, run
+`python3 -m pip uninstall cerebro-skill`.
 
 `cerebro-skill-v2` is superseded by this release and can be archived — its
 specification is implemented here.
